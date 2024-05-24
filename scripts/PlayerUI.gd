@@ -22,7 +22,7 @@ func _display_combat_actions(combat_actions):
 	for action in combat_actions:
 		var button = Button.new()
 		button.text = action.display_name
-		button.visible = true
+		#button.visible = true
 		button.pressed.connect(_on_combat_action_pressed.bind(action))
 		add_child(button)
 

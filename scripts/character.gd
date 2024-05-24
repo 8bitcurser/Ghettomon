@@ -47,7 +47,8 @@ func cast_combat_action(action):
 		heal(action.heal)
 	else:
 		pass
-	get_node('/root/BattleScene').end_current_turn()
+	# manage with a signal
+	root.end_current_turn()
 
 func _decide_combat_action():
 	var health_percent = float(current_hp) / float(max_hp)
