@@ -26,7 +26,7 @@ func take_damage(damage):
 	_update_health_bar()
 	
 	if current_hp <= 0:
-		root.character_died(self)
+		root.char_died(self)
 		queue_free()
 
 func heal(amount):
@@ -36,8 +36,32 @@ func heal(amount):
 	_update_health_bar()
 
 func _on_character_begin_turn(character):
-	if character == self:
+	if character == self and is_player == false:
+		_decide_combat_action()
+
+
+func cast_combat_action(action):
+	if action.damage_amount > 0:
+		opponent.take_damage(action.damage_amount)
+	elif action.heal > 0:
+		heal(action.heal)
+	else:
 		pass
+	get_node('/root/BattleScene').end_current_turn()
+
+func _decide_combat_action():
+	var health_percent = float(current_hp) / float(max_hp)
+	for action in combat_actions:
+		var caction = action as CombatAction
+		if caction.heal > 0:
+			if randf() > health_percent:
+				cast_combat_action(caction)
+				return
+			else:
+				continue
+		else:
+			cast_combat_action(caction)
+			return
 
 func _ready():
 	sprite.flip_h = flip_visual
